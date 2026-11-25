@@ -1,5 +1,5 @@
 <!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body class="gated">
-<title>sapbones</title>
+<title>Snap-Page</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.cdnfonts.com" crossorigin>
 <link href="https://fonts.cdnfonts.com/css/minecraftia" rel="stylesheet">
@@ -262,6 +262,38 @@
   .links li:nth-child(3) { animation-delay: 0.28s; }
   .links li:nth-child(4) { animation-delay: 0.36s; }
 
+  .views {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    width: 100%;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+    font: 500 10.5px/1.3 var(--mono);
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--muted);
+    animation: rise 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) 0.44s both;
+  }
+
+  .views svg {
+    width: 15px;
+    height: 15px;
+    flex: none;
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .views b {
+    font-weight: 500;
+    color: var(--fg);
+    font-variant-numeric: tabular-nums;
+  }
+
   .link {
     display: flex;
     align-items: center;
@@ -521,7 +553,7 @@
 
   .await { animation-play-state: paused !important; }
 
-  .gated .card, .gated .player, .gated .ip, .gated .links li { animation-play-state: paused !important; }
+  .gated .card, .gated .player, .gated .ip, .gated .links li, .gated .views { animation-play-state: paused !important; }
 
   .gate {
     position: fixed;
@@ -604,7 +636,7 @@
     <div class="gate-txt">Click me</div>
   </div>
 </div>
-<noscript><style>.gate { display: none !important; } .gated .card, .gated .player, .gated .ip, .gated .links li { animation-play-state: running !important; }</style></noscript>
+<noscript><style>.gate { display: none !important; } .gated .card, .gated .player, .gated .ip, .gated .links li, .gated .views { animation-play-state: running !important; }</style></noscript>
 
 <main class="stage">
   <div class="tilt" id="tilt">
@@ -658,21 +690,21 @@
 
       <ul class="links">
         <li>
-          <a class="link" href="https://discord.gg/z3hWvkJ3dT" target="_blank">
+          <a class="link" href="https://discord.gg/z3hWvkJ3dT">
             <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></span>
             <span class="name">Discord</span>
             <span class="handle">Server</span>
           </a>
         </li>
         <li>
-          <a class="link" href="https://www.tiktok.com/@sapbones_xd" target="_blank">
+          <a class="link" href="https://www.tiktok.com/@sapbones_xd">
             <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="3"/><polygon points="10.5 9 15 12 10.5 15"/></svg></span>
             <span class="name">TikTok</span>
             <span class="handle">@sapbones_xd</span>
           </a>
         </li>
         <li>
-          <a class="link" href="https://www.youtube.com/@SnapCapito " target="_blank">
+          <a class="link" href="https://www.youtube.com/@SnapCapito">
             <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="4"/><polygon points="10 9 15 12 10 15"/></svg></span>
             <span class="name">YouTube</span>
             <span class="handle">@SnapCapito</span>
@@ -686,6 +718,11 @@
           </a>
         </li>
       </ul>
+
+      <div class="views" id="views" role="status" aria-live="polite">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
+        <span><b id="viewsnum">—</b> <span id="viewslbl">personas vieron la página</span></span>
+      </div>
     </section>
   </div>
 </main>
@@ -1359,13 +1396,77 @@
           });
         }, { threshold: 0.25, rootMargin: "0px 0px -4% 0px" });
 
-        document.querySelectorAll(".player, .links li").forEach(function (el) {
+        document.querySelectorAll(".player, .links li, .views").forEach(function (el) {
           if (el.getBoundingClientRect().top > window.innerHeight * 0.92) {
             el.classList.add("await");
             io.observe(el);
           }
         });
       }
+    })();
+
+    (function () {
+      var num = document.getElementById("viewsnum");
+      var lbl = document.getElementById("viewslbl");
+      if (!num || !lbl || !window.fetch) return;
+
+      var BASE = "https:\/\/abacus.jasoncameron.dev";
+      var NS = "sapbones-ghostly";
+      var KEY = "visitas";
+      var FLAG = "sapbones-visita-contada";
+      var seen = false;
+
+      try { seen = window.localStorage.getItem(FLAG) === "1"; } catch (err) {}
+
+      function call(action) {
+        return fetch(BASE + "/" + action + "/" + NS + "/" + KEY, { cache: "no-store" }).then(function (r) {
+          if (!r.ok) {
+            var e = new Error("http");
+            e.status = r.status;
+            throw e;
+          }
+          return r.json();
+        });
+      }
+
+      function text(v) {
+        var n = Math.round(v);
+        try { return n.toLocaleString("es"); } catch (err) { return String(n); }
+      }
+
+      function show(n) {
+        lbl.textContent = n === 1 ? "persona vio la página" : "personas vieron la página";
+        if (reduce || n < 2) {
+          num.textContent = text(n);
+          return;
+        }
+        var start = null;
+        function tick(now) {
+          if (start === null) start = now;
+          var p = Math.min(1, (now - start) / 1100);
+          num.textContent = text(n * (1 - Math.pow(1 - p, 3)));
+          if (p < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+      }
+
+      var job = seen
+        ? call("get").catch(function (err) {
+            if (err.status === 404) return call("hit");
+            throw err;
+          })
+        : call("hit");
+
+      job.then(function (d) {
+        if (!seen) {
+          try { window.localStorage.setItem(FLAG, "1"); } catch (err) {}
+        }
+        var v = d ? Number(d.value) : NaN;
+        if (isFinite(v)) show(v);
+      }).catch(function () {
+        num.textContent = "";
+        lbl.textContent = "contador no disponible";
+      });
     })();
 
     var ipBtn = document.getElementById("ipcopy");
