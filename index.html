@@ -1,5 +1,5 @@
 <!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body class="gated">
-<title>Snap-Page</title>
+<title>sapbones</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.cdnfonts.com" crossorigin>
 <link href="https://fonts.cdnfonts.com/css/minecraftia" rel="stylesheet">
@@ -541,15 +541,13 @@
     50% { box-shadow: 0 0 0 2px var(--accent), 0 0 0 9px var(--accent-soft), 0 0 56px rgba(224, 163, 58, 0.26); }
   }
 
-  @media (prefers-reduced-motion: no-preference) {
-    body::before {
-      transform: translate3d(0, var(--bg-y, 0px), 0) scale(1.03);
-      transform-origin: 50% 0;
-      will-change: transform;
-    }
-
-    .stage { will-change: transform; }
+  body::before {
+    transform: translate3d(0, var(--bg-y, 0px), 0) scale(1.03);
+    transform-origin: 50% 0;
+    will-change: transform;
   }
+
+  .stage { will-change: transform; }
 
   .await { animation-play-state: paused !important; }
 
@@ -621,9 +619,6 @@
 
   .gate-hint { margin-top: -10px; font: 400 11px/1.4 var(--mono); color: var(--muted); }
 
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after { animation: none !important; transition: none !important; }
-  }
 </style>
 
 <canvas id="dust" aria-hidden="true"></canvas>
@@ -729,7 +724,7 @@
 
 <script>
   (function () {
-    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var reduce = false;
     var canHover = window.matchMedia("(hover: hover)").matches;
 
     document.querySelectorAll('a[href="#"]').forEach(function (a) {
